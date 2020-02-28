@@ -21,7 +21,6 @@ int ARR_MINTESTE[3] = {MINTESTE, MINSAT, MINVAL};
 int ARR_MAXTESTE[3] = {MAXTESTE, MAXSAT, MAXVAL};
 
 
-
 using namespace cv;
 
 
@@ -155,19 +154,21 @@ public:
 
 int main(int argc, char* argv[])
 {
-    bool VIDEO = true;
-
     if (argc < 2)
     {
         std::cerr << "Rodar o código > ./NomeDoArquivo \"NomeDoVideo\"\n";
         return -1;
     }
 
+    char* file_name = argv[1];
+
+    bool VIDEO = true;
+
     if (VIDEO)
     {
         FindingTube find;
 
-        VideoCapture cap(argv[1]);
+        VideoCapture cap(file_name);
 
         if (!cap.isOpened())
         {
@@ -202,9 +203,9 @@ int main(int argc, char* argv[])
     }
     else
     {
-        FindingTube finding;
+        FindingTube find;
 
-        Mat mainImg = imread(argv[1]);
+        Mat mainImg = imread(file_name);
 
         if (mainImg.empty())
         {
@@ -212,17 +213,18 @@ int main(int argc, char* argv[])
             return -1;
         }
 
-        finding.setImage(mainImg);
-        finding.processImage();
-        //finding.findBiggestRect();
-        finding.show();
+        find.setImage(mainImg);
+        find.processImage();
+
+        if (find.findBiggestRect())
+            find.drawBiggestRect();
+
+        find.show();
 
         int key = waitKey(); 
 
+        // Pressionar espaço para salvar o frame atual
         if (key == 32)
-            imwrite("frame.jpg", finding.imageHSV_C3);
+            imwrite("frame.jpg", find.mainImage_C3);
     }
-    
-
-    
 }
