@@ -10,9 +10,6 @@
 #define MINORANGE 0
 #define MAXORANGE 20
 
-#define MINTESTE 0
-#define MAXTESTE 35
-
 #define GAUSSIANFILTER 3
 #define KERNELSIZE 7
  
@@ -30,6 +27,7 @@ using namespace cv;
 
 class FindingTube
 {
+
 public:
 
     Mat mainImage_C3, imageHSV_C3, image_C1;
@@ -65,7 +63,6 @@ public:
 
     void setImage(Mat img)
     {
-
         this->camParam(img);
 
         this->mainImage_C3 = img;
@@ -76,6 +73,8 @@ public:
     {
         // Converte de BGR para HSV
         //cvtColor(this->mainImage_C3, this->imageHSV_C3, COLOR_BGR2HSV);
+
+        // Aplicar o blur
         GaussianBlur(this->mainImage_C3, this->mainImage_C3, Size(GAUSSIANFILTER, GAUSSIANFILTER), 0);
 
         // Pega o range das cores e transforma a imagem em um canal
@@ -158,11 +157,23 @@ int main(int argc, char* argv[])
 {
     bool VIDEO = true;
 
+    if (argc < 2)
+    {
+        std::cerr << "Rodar o código > ./NomeDoArquivo \"NomeDoVideo\"\n";
+        return -1;
+    }
+
     if (VIDEO)
     {
         FindingTube find;
 
         VideoCapture cap(argv[1]);
+
+        if (!cap.isOpened())
+        {
+            std::cerr << "Falha ao abrir o video\n";
+            return -1;
+        }
         
         Mat frame;
 
