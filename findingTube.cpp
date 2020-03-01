@@ -17,9 +17,6 @@
 int ARR_MINORANGE[3] = {MINORANGE, MINSAT, MINVAL};
 int ARR_MAXORANGE[3] = {MAXORANGE, MAXSAT, MAXVAL};
 
-int ARR_MINTESTE[3] = {MINTESTE, MINSAT, MINVAL};
-int ARR_MAXTESTE[3] = {MAXTESTE, MAXSAT, MAXVAL};
-
 
 using namespace cv;
 
@@ -43,6 +40,7 @@ public:
     int biggestContourIdx;
     float biggestContourArea;
     RotatedRect biggestArea;
+    Point2f corners[4];
 
     FindingTube()
     {
@@ -70,7 +68,7 @@ public:
 
     void processImage()
     {
-        // Converte de BGR para HSV
+        // Converte de BGR para HSV (MAL DESEMPENHO)
         //cvtColor(this->mainImage_C3, this->imageHSV_C3, COLOR_BGR2HSV);
 
         // Aplicar o blur
@@ -121,7 +119,48 @@ public:
             }
 
             if ( ctArea > 1000)
-                return true;
+            {
+                this->biggestArea = minAreaRect(this->contours[this->biggestContourIdx]);
+
+                this->biggestArea.points(this->corners);
+
+                float higherCornerX, higherCornerY, botCornerX, botCornerY;
+
+                // Verifica qual linha está com valor de X maior
+                if ( this->corners[3].x > this->corners[1].x )
+                {
+                    higherCornerX = this->corners[3].x;
+                    botCornerX = this->corners[1].x;
+                }
+                else
+                {
+                    higherCornerX = this->corners[1].x;
+                    botCornerX = this->corners[3].x;
+                }
+                
+
+                // Verifica qual linha está com valor de Y maior
+                if ( this->corners[3].y > this->corners[1].y )
+                {
+                    higherCornerY = this->corners[3].y;
+                    botCornerY = this->corners[1].y;     
+                }
+                else
+                {
+                    higherCornerY = this->corners[1].y;
+                    botCornerY = this->corners[3].y;
+                }
+
+
+                // Remove retangulos muito pequenos
+                if ( (higherCornerX - botCornerX) < 40 || (higherCornerY - botCornerY) < 40 )
+                {
+                    std::cout << higherCornerX - botCornerX << "   " << higherCornerY - botCornerY << std::endl;
+                    return false;
+                }
+                else
+                    return true;
+            }
 
             return false;
         }   
@@ -132,15 +171,10 @@ public:
     {
         if (this->contours.size() > 0)
         {
-            this->biggestArea = minAreaRect(this->contours[this->biggestContourIdx]);
-
-            Point2f corners[4];
-            this->biggestArea.points(corners);
-
-            line(this->mainImage_C3, corners[0], corners[1], Scalar(255,0 ,255), 3);
-            line(this->mainImage_C3, corners[1], corners[2], Scalar(255,0 ,255), 3);
-            line(this->mainImage_C3, corners[2], corners[3], Scalar(255,0 ,255), 3);
-            line(this->mainImage_C3, corners[3], corners[0], Scalar(255,0 ,255), 3);
+            //line(this->mainImage_C3, this->corners[0], this->corners[1], Scalar(255,0 ,255), 3);
+            line(this->mainImage_C3, this->corners[1], this->corners[2], Scalar(255,0 ,255), 3);
+            //line(this->mainImage_C3, this->corners[2], this->corners[3], Scalar(255,0 ,255), 3);
+            line(this->mainImage_C3, this->corners[3], this->corners[0], Scalar(255,0 ,255), 3);
         }
     }
 
