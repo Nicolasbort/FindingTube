@@ -1,6 +1,5 @@
-#include "../include/defines.hpp"
+#include "include/defines.hpp"
 
-#include <math.h>
 
 
 int ARR_MINORANGE[3] = {MINORANGE, MINSATORANGE, MINVALORANGE};
@@ -13,7 +12,9 @@ int ARR_MAXRED[3] = {MAXRED, MAXSATRED, MAXVALRED};
 using namespace cv;
 using namespace std;
 
-#define DEBBUG_COLOR_RED false
+#define DEBBUG_COLOR_RED true
+
+
 
 bool isSquare( Rect rectangle )
 {
@@ -166,10 +167,10 @@ public:
     }
 
 
-    void show()
+    void show(const char* title)
     {
         //imshow("this->image", this->mainImage_C3);
-        imshow("this->image", this->mainImage_C3);
+        imshow(title, this->mainImage_C3);
     }
 };
 
@@ -221,6 +222,14 @@ int main(int argc, char* argv[])
             std::cerr << "Falha ao abrir o video\n";
             return -1;
         }
+#if DEBBUG_COLOR_RED
+            cout << "\033[2J\033[1;1H"; 
+            cout << "DEBUGMODE ATIVO!\n";
+            cout << "ALTERAR A LINHA 15 PARA false PARA SAIR\n\n";
+            cout << "DEBUG FEITO PARA VERIFICAR SE A COR VERMELHA ESTA SENDO DETECTADA\n";
+            cout << "MAX HSV: " << MAXRED << " " << MAXSATRED << " " << MAXVALRED << "\n";
+            cout << "MIN HSV: " << MINRED << " " << MINSATRED << " " << MINVALRED << "\n";
+#endif
         
         Mat frame;
 
@@ -249,7 +258,7 @@ int main(int argc, char* argv[])
 
 #endif
 
-            tubo.show();
+            tubo.show("Tubo");
   
             int key = waitKey(10); 
 
@@ -279,7 +288,7 @@ int main(int argc, char* argv[])
         /*if (tubo.findBiggestRect())
             tubo.drawBiggestRect();*/
 
-        tubo.show();
+        tubo.show("Tubo");
 
         int key = waitKey(); 
 

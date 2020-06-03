@@ -33,18 +33,18 @@
 #else
 
     // Limiares da cor azul ( Imagem HSV )
-    #define MINBLUE         40
-    #define MAXBLUE         125
+    #define MINBLUE         60
+    #define MAXBLUE         130
 
-    #define MINSATBLUE      50
-    #define MAXSATBLUE      115
+    #define MINSATBLUE      60
+    #define MAXSATBLUE      160
 
-    #define MINVALBLUE      70
+    #define MINVALBLUE      60
     #define MAXVALBLUE      130
 
     // Limiares da cor amarela ( Imagem HSV )
     #define MINYELLOW       7
-    #define MAXYELLOW       50
+    #define MAXYELLOW       60
 
     #define MINSATYELLOW    90
     #define MAXSATYELLOW    210
@@ -77,6 +77,31 @@
 #define MAXVALORANGE 235
 
 
+// Limiares da cor branca ( Imagem BGR )
+#define MINWHITE 120
+#define MAXWHITE 225
+
+#define MINSATWHITE 95
+#define MAXSATWHITE 210
+
+#define MINVALWHITE 90
+#define MAXVALWHITE 210
+
+
+// Limiares da cor preta ( 1º canal LAB e 3º canal HSV)
+#define MINBLACK 0
+#define MAXBLACK 35
+
+#define MINSATBLACK 0
+#define MAXSATBLACK 40
+
+#define MINVALBLACK 0
+#define MAXVALBLACK 45
+
+
+
+
+
 #define GAUSSIANFILTER      3
 #define KERNELSIZE          7
 
@@ -84,9 +109,22 @@
 #define COLOR_RED   Scalar(0, 0, 255)
 #define COLOR_GREEN Scalar(0, 255, 0)
 #define COLOR_BLUE  Scalar(255, 0, 0)
+#define COLOR_BLACK Scalar(0,  0,  0)
+
+
+#define BLUE_ID 48
+#define YELLOW_ID 49
+#define BLACK_ID 2
+
+
+#define ESC         27
+#define RETURN      10
+#define SPACE       32
+
 
 // Porcentagem utilizada para verificar se é quadrado ou nao
 #define ERROR 2.9f
+
 
 // Utilizado para mostrar o tempo de execução <chrono>
 struct Timer
